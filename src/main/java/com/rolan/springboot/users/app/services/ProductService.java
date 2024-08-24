@@ -12,5 +12,6 @@ public interface ProductService {
     Product save(Product product);
     Optional<Product> delete(Long id);
     Optional<Product> update(Long id, Product product);
+    boolean existsBySku(String sku);
 
 }

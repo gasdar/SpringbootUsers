@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
-public class ValidationHelper {
+public class ResquestHelper {
 
     public static ResponseEntity<?> getErrorsFromBody(BindingResult bindingResult) {
         Map<String, String> errors = new HashMap<>();
         bindingResult.getFieldErrors().forEach(fieldError -> {
             String campo = fieldError.getField();
-            errors.put(campo, "Campo '" + campo + "' es invalido, " + fieldError.getDefaultMessage());
+            errors.put(campo, "El campo '" + campo + "' " + fieldError.getDefaultMessage());
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }

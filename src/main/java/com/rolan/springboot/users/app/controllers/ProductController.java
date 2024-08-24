@@ -1,6 +1,5 @@
 package com.rolan.springboot.users.app.controllers;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rolan.springboot.users.app.entities.Product;
-import com.rolan.springboot.users.app.helpers.ValidationHelper;
+import com.rolan.springboot.users.app.helpers.ResquestHelper;
 import com.rolan.springboot.users.app.services.ProductService;
+// import com.rolan.springboot.users.app.validations.ProductValidation;
 
 import jakarta.validation.Valid;
 
@@ -28,11 +28,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     @Autowired
-    private ProductService service;    
+    private ProductService service;
+
+    // @Autowired
+    // private ProductValidation validation;
     
     @GetMapping
-    public List<Product> listAll() {
-        return service.findAll();
+    public ResponseEntity<?> listAll() {
+        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
@@ -46,16 +49,18 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody Product product, BindingResult bindingResult) {
+        // validation.validate(product, bindingResult);
         if(bindingResult.hasErrors()) {
-            return ValidationHelper.getErrorsFromBody(bindingResult);
+            return ResquestHelper.getErrorsFromBody(bindingResult);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(product));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody Product product, BindingResult bindingResult, @PathVariable Long id) {
+        // validation.validate(product, bindingResult);
         if(bindingResult.hasErrors()) {
-            return ValidationHelper.getErrorsFromBody(bindingResult);
+            return ResquestHelper.getErrorsFromBody(bindingResult);
         }
         Optional<Product> optionalProd = service.update(id, product);
         if(optionalProd.isPresent()) {
